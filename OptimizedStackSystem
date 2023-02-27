@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using DG.Tweening;
+public class OptimizedStackSystem : MonoBehaviour
+{
+    public GameObject[] Eggs;
+    public int eggCount;
+    public GameObject EGG;
+    void Start()
+    {
+        StartCoroutine(EggInstanterEnum());
+    }
+    public void TakeEgg()
+    {
+        if (eggCount >= 1)
+        {
+            eggCount -= 1;
+            Eggs[eggCount].SetActive(false);
+        }
+    }
+    IEnumerator EggInstanterEnum()
+    {
+        while (true)
+        {
+            if (eggCount < 36)
+            {
+                EGG.transform.DOJump(new Vector3(Eggs[eggCount].transform.position.x , Eggs[eggCount].transform.position.y + 0.1f, Eggs[eggCount].transform.position.z), 1f, 0, 0.4f).SetEase(Ease.OutQuad);
+                eggCount += 1;
+                Eggs[eggCount - 1].SetActive(true);
+                EGG.transform.DOLocalMove(new Vector3(0, 0, 0), 0.1f);
+            }
+            yield return new WaitForSeconds(0.4f);
+        }
+    }
+}
